@@ -57,19 +57,17 @@ class FavoriteTvShowsFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                if (view != null) {
-                    val swipedPosition = viewHolder.adapterPosition
-                    val tvShowEntity = tvShowsAdapter.getSwipedData(swipedPosition)
-                    var state = tvShowEntity.favorite
+                val swipedPosition = viewHolder.adapterPosition
+                val tvShowEntity = tvShowsAdapter.getSwipedData(swipedPosition)
+                var state = tvShowEntity.favorite
+                viewModel.setFavorite(tvShowEntity, !state)
+                state = !state
+                val snackBar =
+                    Snackbar.make(view, R.string.message_undo, Snackbar.LENGTH_LONG)
+                snackBar.setAction(R.string.message_ok) {
                     viewModel.setFavorite(tvShowEntity, !state)
-                    state = !state
-                    val snackBar =
-                        Snackbar.make(view, R.string.message_undo, Snackbar.LENGTH_LONG)
-                    snackBar.setAction(R.string.message_ok) {
-                        viewModel.setFavorite(tvShowEntity, !state)
-                    }
-                    snackBar.show()
                 }
+                snackBar.show()
             }
         })
 
@@ -108,7 +106,7 @@ class FavoriteTvShowsFragment : Fragment() {
     }
 
     private val tvShowsObserver = Observer<List<Movie>> { tvShows ->
-        if (tvShows.isNullOrEmpty()){
+        if (tvShows.isEmpty()){
             binding.progressBar.visibility = View.GONE
             binding.notFound.visibility = View.VISIBLE
             binding.notFoundText.visibility = View.VISIBLE

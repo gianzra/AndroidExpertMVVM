@@ -107,7 +107,7 @@ class FavoriteMoviesFragment : Fragment() {
     }
 
     private val moviesObserver = Observer<List<Movie>> { movies ->
-        if (movies.isNullOrEmpty()) {
+        if (movies.isEmpty()) {
             binding.progressBar.visibility = View.GONE
             binding.notFound.visibility = View.VISIBLE
             binding.notFoundText.visibility = View.VISIBLE
