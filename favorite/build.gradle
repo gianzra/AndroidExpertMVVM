@@ -12,6 +12,17 @@ android {
         minSdkVersion 21
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationVariants.configureEach { variant ->
+            if (variant.buildType.name == "release") {
+                variant.assembleProvider.get().configure {
+                    doLast {
+                        tasks.exportReleaseConsumerProguardFiles.inputs.files(
+                                tasks.extractProguardFiles.outputs
+                        )
+                    }
+                }
+            }
+        }
     }
 
     buildTypes {
